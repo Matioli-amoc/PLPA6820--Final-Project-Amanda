@@ -9,7 +9,9 @@ the annual records. Data are provided by the United States Department of Agricul
 (USDA) and are freely available from the USDA Data Catalog
 
 [DAIRY DATA ACCESS USDA](https://www.ers.usda.gov/data-products/dairy-data)
+
 [Data quarterly-milk-factors.csv](https://github.com/Matioli-amoc/PLPA6820--Final-Project-Amanda/blob/main/quarterly-milk-factors.csv)
+
 [Data milk-cows-and-prod.csv](https://github.com/Matioli-amoc/PLPA6820--Final-Project-Amanda/blob/main/milk-cows-and-prod.csv)
 
 ### Data Volume

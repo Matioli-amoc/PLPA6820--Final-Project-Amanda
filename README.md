@@ -10,7 +10,7 @@ the annual records. Data are provided by the United States Department of Agricul
 
 These are the data files available for analysis, which can be found on the USDA website and also on GitHub:
 
-[DAIRY DATA ACCESS USDA](https://www.ers.usda.gov/data-products/dairy-data)
+[Dairy Data Access USDA](https://www.ers.usda.gov/data-products/dairy-data)
 
 [Data quarterly-milk-factors.csv](https://github.com/Matioli-amoc/PLPA6820--Final-Project-Amanda/blob/main/quarterly-milk-factors.csv)
 

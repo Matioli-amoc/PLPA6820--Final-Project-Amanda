@@ -6,7 +6,9 @@
 
 This project will use publicly available U.S. milk production data, including quarterly and 
 the annual records. Data are provided by the United States Department of Agriculture 
-(USDA) and are freely available from the USDA Data Catalog
+(USDA) and are freely available from the USDA Data Catalog.
+
+These are the data files available for analysis, which can be found on the USDA website and also on GitHub:
 
 [DAIRY DATA ACCESS USDA](https://www.ers.usda.gov/data-products/dairy-data)
 

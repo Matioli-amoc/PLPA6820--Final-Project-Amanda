@@ -29,3 +29,55 @@ variability?
 
 ## File Tree
 
+
+```
+├── Dairy.m.csv
+├── figures
+│   ├── Fig_boxplot.png
+│   ├── Fig_map.png
+│   ├── Fig_scatter.png
+│   ├── Fig_trend.png
+│   └── Fig_variability.png
+├── Final Project.Rmd
+├── milk-cows-and-prod.csv
+├── PLPA6820- Amanda Final Project.Rproj
+├── quarterly-milk-factors.csv
+├── README.md
+├── renv
+│   ├── activate.R
+│   ├── library
+│   │   └── windows
+│   ├── settings.json
+│   └── staging
+└── renv.lock
+
+```
+
+### How to run the project:
+
+This project uses RStudio and the packages versions are managed using RENV.
+Some packages examples:
+```
+tidyverse
+dplyr
+ggplot2
+lme4
+emmeans
+maps, mapdata, mapproj
+```
+
+1. Fork and clone the repository in RStudio terminal using:
+
+```
+git clone **URL for the forked repository**
+```
+
+2. Open the .Rproj file in RStudio
+
+3. Restore the environment:
+
+   ```r
+   renv::restore()
+   ```
+
+4. Run the R Markdown file "Final Project.Rmd" to reproduce the analysis and figures.

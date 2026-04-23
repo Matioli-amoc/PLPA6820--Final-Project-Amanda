@@ -1,0 +1,261 @@
+---
+title: "Final project"
+author: "Amanda Chaves"
+date: "2026-04-06"
+output:
+  html_document:
+    toc: TRUE
+  md_document:
+
+---
+
+# FINAL PROJECT
+## Descriptive Analysis of U.S. Milk Production Data
+
+1. Data and Source
+
+This project will use publicly available U.S. milk production data, including quarterly and the annual records. Data are provided by the United States Department of Agriculture (USDA) and are freely available from the USDA Data Catalog.
+
+[DAIRY DATA ACCESS USDA](https://www.ers.usda.gov/data-products/dairy-data)
+[Data quarterly-milk-factors.csv](https://github.com/Matioli-amoc/PLPA6820--Final-Project-Amanda/blob/main/quarterly-milk-factors.csv)
+[Data milk-cows-and-prod.csv](https://github.com/Matioli-amoc/PLPA6820--Final-Project-Amanda/blob/main/milk-cows-and-prod.csv)
+
+### Packages
+
+```{r}
+
+source("renv/activate.R")
+
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(emmeans)
+library(lme4)
+library(multcompView)
+library(usmap)
+library(maps)
+library(mapdata)
+library(mapproj)
+
+cbbPalette <- c( "#FADADD", "#C2185B", "#D32F2F", "#F57C00", "#FBC02D",
+  "#A5D6A7", "#1B5E20", "#90CAF9", "#0D47A1", "#7E57C2", "#6A1B9A")
+
+dir.create("figures", showWarnings = FALSE)
+
+```
+
+### Data:
+
+```{r}
+
+Dairy.data.US <- read.csv("quarterly-milk-factors.csv", na.strings = c("#N/A", "NA", ""))
+
+Dairy.data.R <- read.csv("milk-cows-and-prod.csv", na.strings = c("#N/A", "NA", ""))
+
+```
+
+### File Tree
+
+```
+├── Dairy.m.csv
+├── figures
+│   ├── Fig_boxplot.png
+│   ├── Fig_map.png
+│   ├── Fig_scatter.png
+│   ├── Fig_trend.png
+│   └── Fig_variability.png
+├── Final Project.Rmd
+├── milk-cows-and-prod.csv
+├── PLPA6820- Amanda Final Project.Rproj
+├── quarterly-milk-factors.csv
+├── README.md
+├── renv
+│   ├── activate.R
+│   ├── library
+│   │   └── windows
+│   ├── settings.json
+│   └── staging
+└── renv.lock
+
+```
+
+
+### Cleaning:
+
+Filter data equal or grater than 2014, and select variables (quality control of 10 years):
+
+```{r}
+
+Dairy.annual <- Dairy.data.US %>%
+  filter(Period == "ANNUAL", Year >= 2014) %>%
+  select(Year, Data_item, Value) %>%
+  filter(Data_item %in% c("Milk cow", "Milk per cow", "Milk production")) %>%
+  pivot_wider(names_from = Data_item, values_from = Value)
+
+Dairy.regional <- Dairy.data.R %>%
+  filter(Table %in% c("Milk cows", "Milk per cow", "Milk production"),
+         Data_item %in% c("Milk cows, average inventory", "Milk production per cow, average", "Milk production"),
+         Year >= 2014, State != "Total region") %>%
+  select(Year, State, Region, Table, Value) %>%
+  pivot_wider(names_from = Table,
+              values_from = Value) %>%
+  rename(Milk_cows_state = 'Milk cows',
+         Milk_per_cows_state = 'Milk per cow',
+         Milk_production_state = 'Milk production')
+
+```
+
+### Merging
+
+```{r}
+# merging regional and US data
+## Diry.m = state production + region
+
+Dairy.m <- left_join(Dairy.regional, Dairy.annual, by = "Year")
+
+## milk_region = agragated data by region to calculate linear models per regions
+
+Dairy.r <- Dairy.m %>%
+  group_by(Year, Region) %>%
+  summarise(
+    Milk_cows_region = sum(Milk_cows_state, na.rm = TRUE),
+    Milk_production_region = sum(Milk_production_state, na.rm = TRUE),
+    Milk_per_cow_region = Milk_production_region / Milk_cows_region
+  )
+
+```
+
+---
+
+### Analysis
+
+Milk production data were analyzed using descriptive statistics, linear regression, and correlation analysis to evaluate relationships between herd size and production efficiency.
+
+
+```{r}
+# Linear model of Milk production and Milk cows
+
+lm1 <- lm(Milk_production_region ~ Milk_cows_region, data = Dairy.r)
+summary(lm1)
+
+cor.test(Dairy.r$Milk_cows_region, Dairy.r$Milk_per_cow_region)
+
+```
+
+The linear model indicates a positive relationship between milk cow population and total milk production.
+
+### Figures
+
+```{r}
+# Plot and correlation of Milk_cows and Milk production by state
+ggplot(Dairy.m, aes(x = Milk_cows_state, y = Milk_production_state, color = Region)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "grey") +
+  labs(x = "Milk cows (state)", y = "Milk production (state)") +
+  theme_classic()
+  
+ggsave("figures/Fig_scatter.png", width = 8, height = 6, dpi = 300)
+```
+
+```{r}
+#Calculate productivity per cow
+
+# Create a new column for milk production per cow (efficiency)
+Dairy.m <- Dairy.m %>%
+  mutate(Productivity_per_cow = Milk_production_state / Milk_cows_state)
+
+summary(Dairy.m$Productivity_per_cow)
+
+ggplot(Dairy.m, aes(x = Region, y = Productivity_per_cow, fill = Region)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.6) +
+  geom_jitter(width = 0.2, alpha = 0.3, size = 1) +
+  scale_fill_manual(values = cbbPalette) +
+  theme_classic() +
+  coord_flip() +
+  labs(
+    title = "Milk Productivity per Cow Across US Regions",
+    x = "Region",
+    y = "Productivity per Cow"
+  ) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
+ggsave("figures/Fig_boxplot.png", width = 8, height = 6, dpi = 300)
+```
+
+### Maps of milk production per state
+
+```{r}
+milk.production.state <- Dairy.m %>%
+  group_by(State) %>%
+  summarise(mean_milk_production = mean(Milk_production_state, na.rm = TRUE))
+
+milk.production.state$State <- toupper(milk.production.state$State)
+
+state.data <- map_data("state")
+state.data$State <- toupper(state.data$region)
+
+milk.by.state.map <- left_join(state.data, milk.production.state, by = "State")
+
+Fig1 <- ggplot() +
+  geom_polygon(data = milk.by.state.map, 
+               aes(x = long, y = lat, group = group, fill = mean_milk_production),
+               color = "grey", size = 0.2) +
+  geom_polygon(data = milk.by.state.map, 
+               aes(x = long, y = lat, group = group),
+               color = "black", fill = NA) +
+  scale_fill_gradient(low = "#f7fcf5", high = cbbPalette[7],
+                      na.value = "grey90",
+                      name = "Avg Milk Production (kg)") +
+  theme_minimal() +
+  coord_map("albers", lat0 = 45.5, lat1 = 29.5) +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  ggtitle("Average State-level Milk Production in the US") +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold")
+  )
+
+Fig1
+
+ggsave("figures/Fig_map.png", plot = Fig1, width = 8, height = 6, dpi = 300)
+```
+
+
+### Tendency over years
+
+```{r}
+ggplot(Dairy.r, aes(x = Year, y = Milk_production_region, color = Region)) +
+  geom_line() +
+  geom_point() +
+  theme_classic() +
+  labs(x = "Year", y = "Milk production (region)")
+
+ggsave("figures/Fig_trend.png", width = 8, height = 6, dpi = 300)
+
+```
+
+### Variability over years
+
+```{r}
+Dairy.r %>%
+  group_by(Year) %>%
+  summarise(sd_prod = sd(Milk_production_region, na.rm = TRUE)) %>%
+  ggplot(aes(Year, sd_prod)) +
+  geom_line(color = cbbPalette[9], linewidth = 1) +
+  theme_classic() +
+  labs(
+    title = "Temporal Variability in Milk Production",
+    x = "Year",
+    y = "Standard Deviation of Milk Production"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
+ggsave("figures/Fig_variability.png", width = 8, height = 6, dpi = 300)
+```
+

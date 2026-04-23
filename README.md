@@ -39,6 +39,15 @@ variability?
 │   ├── Fig_trend.png
 │   └── Fig_variability.png
 ├── Final Project.Rmd
+├── Final-Project.html
+├── Final-Project.md
+├── Final-Project_files
+│   └── figure-markdown_strict
+│       ├── unnamed-chunk-10-1.png
+│       ├── unnamed-chunk-6-1.png
+│       ├── unnamed-chunk-7-1.png
+│       ├── unnamed-chunk-8-1.png
+│       └── unnamed-chunk-9-1.png
 ├── milk-cows-and-prod.csv
 ├── PLPA6820- Amanda Final Project.Rproj
 ├── quarterly-milk-factors.csv
@@ -50,7 +59,6 @@ variability?
 │   ├── settings.json
 │   └── staging
 └── renv.lock
-
 ```
 
 ### How to run the project:

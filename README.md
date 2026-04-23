@@ -81,3 +81,24 @@ git clone **URL for the forked repository**
    ```
 
 4. Run the R Markdown file "Final Project.Rmd" to reproduce the analysis and figures.
+
+---
+
+### Outputs:
+
+This project generates:
+
+![Scatter plots of milk cows vs production](
+https://github.com/Matioli-amoc/PLPA6820--Final-Project-Amanda/blob/main/figures/Fig_scatter.png)
+
+![Boxplots of productivity per cow](
+figures/Fig_boxplot.png)
+
+![U.S. map of milk production](
+figures/Fig_map.png)
+
+![Time series trends by region](
+figures/Fig_trend.png)
+
+![Variability plot showing the standard deviation of milk production across years](
+figures/Fig_variability.png)

@@ -153,6 +153,31 @@ ggplot(Dairy.m, aes(x = Milk_cows_state, y = Milk_production_state, color = Regi
 
 All analyses were performed in R using a reproducible workflow supported by R Markdown and `renv`.
 
+---
+
+### Results
+
+Milk production showed an overall increasing trend from 2014 to recent years, although patterns varied across regions. Some regions, such as the Lake States and Mountain Region, displayed consistent growth in milk production over time, while others remained relatively stable or showed slight fluctuations.
+
+The variability analysis indicated that the standard deviation of milk production increased over time, suggesting greater differences among regions in recent years. This may reflect regional specialization or differences in production systems.
+
+Productivity per cow differed across regions, as illustrated in the boxplot. Regions such as the West Coast and Northern Plains showed higher median productivity, while regions like Delta States and Other States had lower values. Additionally, the spread within regions indicates variability in efficiency, likely influenced by management practices and environmental conditions.
+
+---
+### Reproducibility
+
+This project is fully reproducible using:
+
+* R Markdown
+* Version control (Git/GitHub)
+* renv for package management
+* Readme file
+---
+
+### Author
+
+Amanda Matioli de Oliveira Chaves
+Auburn University
 
 
 

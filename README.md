@@ -163,6 +163,8 @@ The variability analysis indicated that the standard deviation of milk productio
 
 Productivity per cow differed across regions, as illustrated in the boxplot. Regions such as the West Coast and Northern Plains showed higher median productivity, while regions like Delta States and Other States had lower values. Additionally, the spread within regions indicates variability in efficiency, likely influenced by management practices and environmental conditions.
 
+Overall, U.S. milk production increased in average output over time, with a moderate increase in variability across regions.
+
 ---
 ### Reproducibility
 

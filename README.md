@@ -133,8 +133,8 @@ Data were filtered for the last 10 years (2014–present). Analyses include:
 
 ```r
 Dairy.annual <- Dairy.data.US %>%
-  filter(Period == "ANNUAL", Year >= 2014) %>% # Subset
-  select(Year, Data_item, Value) %>% # Select 
+  filter(Period == "ANNUAL", Year >= 2014) %>% 
+  select(Year, Data_item, Value) %>% 
   pivot_wider(names_from = Data_item, values_from = Value)  #Transform from long to wider format
 ```
 

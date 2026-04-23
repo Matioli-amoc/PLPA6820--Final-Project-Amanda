@@ -112,3 +112,48 @@ figures/Fig_trend.png)
 
 ![Figure5](
 figures/Fig_variability.png)
+
+**All figures are saved in the `figures/` folder.**
+
+---
+
+### Methods Summary
+
+Data were filtered for the last 10 years (2014–present). Analyses include:
+
+* Data cleaning and transformation using `dplyr`, for example:
+
+```r
+Dairy.annual <- Dairy.data.US %>%
+  filter(Period == "ANNUAL", Year >= 2014) %>% # Subset
+  select(Year, Data_item, Value) %>% # Select 
+  pivot_wider(names_from = Data_item, values_from = Value)  #Transform from long to wider format
+```
+
+* Linear regression models to evaluate relationships between variables:
+
+```r
+lm1 <- lm(Milk_production_region ~ Milk_cows_region, data = Dairy.r)
+summary(lm1)
+```
+
+* Correlation analysis:
+
+```r
+cor.test(Dairy.r$Milk_cows_region, Dairy.r$Milk_per_cow_region)
+```
+
+* Visualization using `ggplot2`, including scatter plots, boxplots, and maps:
+
+```r
+ggplot(Dairy.m, aes(x = Milk_cows_state, y = Milk_production_state, color = Region)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+All analyses were performed in R using a reproducible workflow supported by R Markdown and `renv`.
+
+
+
+
+

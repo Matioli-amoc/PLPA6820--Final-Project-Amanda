@@ -3,10 +3,9 @@ title: "Final project"
 author: "Amanda Chaves"
 date: "2026-04-06"
 output:
+  md_document:
   html_document:
     toc: TRUE
-  md_document:
-
 ---
 
 # FINAL PROJECT
@@ -48,6 +47,8 @@ dir.create("figures", showWarnings = FALSE)
 
 ```{r}
 
+# Reading US data and regional/state data:
+
 Dairy.data.US <- read.csv("quarterly-milk-factors.csv", na.strings = c("#N/A", "NA", ""))
 
 Dairy.data.R <- read.csv("milk-cows-and-prod.csv", na.strings = c("#N/A", "NA", ""))
@@ -65,6 +66,15 @@ Dairy.data.R <- read.csv("milk-cows-and-prod.csv", na.strings = c("#N/A", "NA", 
 │   ├── Fig_trend.png
 │   └── Fig_variability.png
 ├── Final Project.Rmd
+├── Final-Project.html
+├── Final-Project.md
+├── Final-Project_files
+│   └── figure-markdown_strict
+│       ├── unnamed-chunk-10-1.png
+│       ├── unnamed-chunk-6-1.png
+│       ├── unnamed-chunk-7-1.png
+│       ├── unnamed-chunk-8-1.png
+│       └── unnamed-chunk-9-1.png
 ├── milk-cows-and-prod.csv
 ├── PLPA6820- Amanda Final Project.Rproj
 ├── quarterly-milk-factors.csv
@@ -76,7 +86,6 @@ Dairy.data.R <- read.csv("milk-cows-and-prod.csv", na.strings = c("#N/A", "NA", 
 │   ├── settings.json
 │   └── staging
 └── renv.lock
-
 ```
 
 
@@ -86,12 +95,16 @@ Filter data equal or grater than 2014, and select variables (quality control of 
 
 ```{r}
 
+# keeping only annual data and last 10 years
+# selecting main variables for analysis
 Dairy.annual <- Dairy.data.US %>%
   filter(Period == "ANNUAL", Year >= 2014) %>%
   select(Year, Data_item, Value) %>%
   filter(Data_item %in% c("Milk cow", "Milk per cow", "Milk production")) %>%
   pivot_wider(names_from = Data_item, values_from = Value)
 
+# filtering regional data and removing totals
+# reshaping data to wide format
 Dairy.regional <- Dairy.data.R %>%
   filter(Table %in% c("Milk cows", "Milk per cow", "Milk production"),
          Data_item %in% c("Milk cows, average inventory", "Milk production per cow, average", "Milk production"),
@@ -108,12 +121,12 @@ Dairy.regional <- Dairy.data.R %>%
 ### Merging
 
 ```{r}
-# merging regional and US data
+# merging regional and US data by Year
 ## Diry.m = state production + region
 
 Dairy.m <- left_join(Dairy.regional, Dairy.annual, by = "Year")
 
-## milk_region = agragated data by region to calculate linear models per regions
+## milk_region = aggregated data by region to calculate linear models per regions
 
 Dairy.r <- Dairy.m %>%
   group_by(Year, Region) %>%
@@ -138,6 +151,7 @@ Milk production data were analyzed using descriptive statistics, linear regressi
 lm1 <- lm(Milk_production_region ~ Milk_cows_region, data = Dairy.r)
 summary(lm1)
 
+# correlation between cows and productivity
 cor.test(Dairy.r$Milk_cows_region, Dairy.r$Milk_per_cow_region)
 
 ```
@@ -188,6 +202,7 @@ ggsave("figures/Fig_boxplot.png", width = 8, height = 6, dpi = 300)
 ### Maps of milk production per state
 
 ```{r}
+# calculate average production per state
 milk.production.state <- Dairy.m %>%
   group_by(State) %>%
   summarise(mean_milk_production = mean(Milk_production_state, na.rm = TRUE))
@@ -197,8 +212,10 @@ milk.production.state$State <- toupper(milk.production.state$State)
 state.data <- map_data("state")
 state.data$State <- toupper(state.data$region)
 
+# join map data with production values
 milk.by.state.map <- left_join(state.data, milk.production.state, by = "State")
 
+# plot US map with production values
 Fig1 <- ggplot() +
   geom_polygon(data = milk.by.state.map, 
                aes(x = long, y = lat, group = group, fill = mean_milk_production),
@@ -228,6 +245,7 @@ ggsave("figures/Fig_map.png", plot = Fig1, width = 8, height = 6, dpi = 300)
 ### Tendency over years
 
 ```{r}
+# line plot showing production over time by region
 ggplot(Dairy.r, aes(x = Year, y = Milk_production_region, color = Region)) +
   geom_line() +
   geom_point() +
@@ -241,6 +259,7 @@ ggsave("figures/Fig_trend.png", width = 8, height = 6, dpi = 300)
 ### Variability over years
 
 ```{r}
+# calculate standard deviation per year (variability)
 Dairy.r %>%
   group_by(Year) %>%
   summarise(sd_prod = sd(Milk_production_region, na.rm = TRUE)) %>%

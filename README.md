@@ -88,17 +88,27 @@ git clone **URL for the forked repository**
 
 This project generates:
 
-![Scatter plots of milk cows vs production](
+* Scatter plot showing the relationship between number of milk cows and total milk production
+
+![Figure1](
 https://github.com/Matioli-amoc/PLPA6820--Final-Project-Amanda/blob/main/figures/Fig_scatter.png)
 
-![Boxplots of productivity per cow](
+* Boxplot illustrating milk productivity per cow across U.S. regions
+
+![Figure2](
 figures/Fig_boxplot.png)
 
-![U.S. map of milk production](
+* Map of average state-level milk production in the United States
+
+![Figure3](
 figures/Fig_map.png)
 
-![Time series trends by region](
+* Time series plot showing milk production trends over time by region
+
+![Figure4](
 figures/Fig_trend.png)
 
-![Variability plot showing the standard deviation of milk production across years](
+* Variability plot showing the standard deviation of milk production across years
+
+![Figure5](
 figures/Fig_variability.png)

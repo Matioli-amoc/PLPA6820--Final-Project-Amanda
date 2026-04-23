@@ -2,6 +2,8 @@
 
 ## Descriptive Analysis of U.S. Milk Production Data
 
+This project analyzes U.S. milk production trends from 2014 to present, focusing on changes in average output and variability across regions.
+
 ### Data and Source
 
 This project will use publicly available U.S. milk production data, including quarterly and 
@@ -18,7 +20,7 @@ These are the data files available for analysis, which can be found on the USDA 
 
 ### Data Volume
 
-The data consist of two CSV files containing U.S. milk production information at state and national levels across multiple years (2014–present). The datasets include variables such as number of milk cows, milk production per cow, total milk production, and regional/state identifiers.
+The data consist of two CSV files containing U.S. milk production information at state and national levels across multiple years (2014-present). The datasets include variables such as number of milk cows, milk production per cow, total milk production, and regional/state identifiers.
 
 Together, the files provide approximately five main variables per period, which allows for straightforward data organization and statistical analysis. The data are relatively small in size, which facilitates efficient handling, cleaning, and visualization in R. This structure also improves reproducibility and makes the workflow easy to execute on different systems.
 
@@ -63,7 +65,7 @@ variability?
 
 ### How to run the project:
 
-This project uses RStudio and the packages versions are managed using RENV.
+This project uses RStudio and the packages versions are managed using 'renv'.
 Some packages examples:
 ```
 tidyverse
@@ -71,7 +73,9 @@ dplyr
 ggplot2
 lme4
 emmeans
-maps, mapdata, mapproj
+maps
+mapdata
+mapproj
 ```
 
 1. Fork and clone the repository in RStudio terminal using:
@@ -99,7 +103,7 @@ This project generates:
 * Scatter plot showing the relationship between number of milk cows and total milk production
 
 ![Figure1](
-https://github.com/Matioli-amoc/PLPA6820--Final-Project-Amanda/blob/main/figures/Fig_scatter.png)
+figures/Fig_scatter.png)
 
 * Boxplot illustrating milk productivity per cow across U.S. regions
 
@@ -181,7 +185,7 @@ This project is fully reproducible using:
 * R Markdown
 * Version control (Git/GitHub)
 * renv for package management
-* Readme file
+* README file
 ---
 
 ### Author

@@ -187,6 +187,7 @@ This project is fully reproducible using:
 ### Author
 
 Amanda Matioli de Oliveira Chaves
+
 Auburn University
 
 
